@@ -1,0 +1,38 @@
+syntax enable
+set nu
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set showmatch
+set incsearch
+set hlsearch
+set autoindent
+set mouse=a
+
+call plug#begin('~/.vim/plugged')
+Plug 'easymotion/vim-easymotion'
+Plug 'preservim/nerdtree'
+call plug#end()
+
+let mapleader=" "
+nmap H ^
+nmap J <C-u>
+nmap K <C-d>
+nmap L $
+nmap <leader>s <Plug>(easymotion-s2)
+nmap <leader>m :NERDTree<Cr>
+nmap <leader>h <C-w>h 
+nmap <leader>j <C-w>j
+nmap <leader>k <C-w>k
+nmap <leader>l <C-w>l
+nmap <leader>+ <C-w>+
+nmap <leader>- <C-w>-
+nmap <leader>< <C-w><
+nmap <leader>> <C-w>>
+
+
+imap jj <esc>  
+imap <C-h> <Left>
+imap <C-j> <Down>
+imap <C-k> <Up>
+imap <C-l> <Right>
