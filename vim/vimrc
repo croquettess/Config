@@ -22,7 +22,7 @@ call plug#end()
 
 let g:coc_global_extensions = ['coc-json', 'coc-cmake', 'coc-clangd', 'coc-sh', 'coc-highlight']
 let g:DoxygenToolkit_authorName = "croquettess"
-let g:DoxygenToolkit_projectNumber = ""
+let g:DoxygenToolkit_versionString = ""
 
 let mapleader=" "
 nmap qq :q!<Cr>
@@ -57,4 +57,5 @@ autocmd FileType c,cpp,cc,h,hpp setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritePre *.c,*.cpp,*.h,*.hpp,*.cc :%!clang-format
 autocmd BufWritePre * if getline(line('$')) !~# '^\s*$' | call append(line('$'), '') | endif
+autocmd BufReadPost * if line("'\"") > 0 && line ("'\"") <= line("$") | exe "normal! g`\"" | endif
 
