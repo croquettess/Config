@@ -8,32 +8,33 @@ set incsearch
 set hlsearch
 set autoindent
 set nocompatible
+set encoding=utf-8
+set updatetime=300
 colors ron
-" hi Pmenu ctermfg=7 ctermbg=236
-hi PmenuSel ctermfg=white ctermbg=32
-hi CocFloating ctermfg=black ctermbg=240
+hi Pmenu ctermbg=0 ctermfg=15
+hi PmenuSel ctermfg=15 ctermbg=240
+"hi CocFloating ctermfg=black ctermbg=240
 
 call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'easymotion/vim-easymotion'
 Plug 'preservim/nerdtree'
 Plug 'vim-scripts/DoxygenToolkit.vim'
+Plug 'junegunn/fzf', {'dir': '~/.fzf','do': './install --all'}
+Plug 'junegunn/fzf.vim'
+Plug 'airblade/vim-gitgutter'
 call plug#end()
 
-let g:coc_global_extensions = ['coc-json', 'coc-cmake', 'coc-clangd', 'coc-sh', 'coc-highlight']
+let g:coc_global_extensions = ['coc-snippets', 'coc-cmake', 'coc-clangd', 'coc-python', 'coc-sh', 'coc-json', 'coc-highlight']
 let g:DoxygenToolkit_authorName = "croquettess"
 let g:DoxygenToolkit_versionString = ""
 
 let mapleader=" "
 nmap qq :q!<Cr>
-nmap <leader>w :w<Cr>
 nmap s ""
 nmap H ^
 nmap L $
-nmap <leader>s <Plug>(easymotion-s2)
-nmap <leader>m :NERDTree<Cr>
-nmap <leader>df :Dox<Cr>
-nmap <leader>dh :DoxAuthor<Cr>
+nmap <leader>w :w<Cr>
 nmap <leader>h <C-w>h
 nmap <leader>j <C-w>j
 nmap <leader>k <C-w>k
@@ -42,7 +43,17 @@ nmap <leader>+ <C-w>+
 nmap <leader>- <C-w>-
 nmap <leader>< <C-w><
 nmap <leader>> <C-w>>
-
+nmap <leader>s <Plug>(easymotion-s2)
+nmap <leader>m :NERDTree<Cr>
+nmap <leader>df :Dox<Cr>
+nmap <leader>dh :DoxAuthor<Cr>
+nmap gd <Plug>(coc-definition)
+nmap gr <Plug>(coc-references)
+nmap gy <Plug>(coc-type-definition)
+nmap gi <Plug>(coc-implementation)
+nmap gs :CocCommand clangd.symbolInfo<Cr>
+nmap gf :Files<Cr>
+nmap <leader>o :CocCommand clangd.switchSourceHeader<Cr>
 
 imap jj <esc>
 imap <C-h> <Left>
@@ -58,4 +69,53 @@ autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritePre *.c,*.cpp,*.h,*.hpp,*.cc :%!clang-format
 autocmd BufWritePre * if getline(line('$')) !~# '^\s*$' | call append(line('$'), '') | endif
 autocmd BufReadPost * if line("'\"") > 0 && line ("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+imap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+imap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+imap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔",
+    \ "Ignored"   : "☒",
+    \ "Unknown"   : "?"
+    \ }
+
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeShowBookmarks=1
+let g:NERDTreeGitStatusConcealMap = {
+    \ 'Modified'  : '✹',
+    \ 'Staged'    : '✚',
+    \ 'Untracked' : '✭',
+    \ 'Renamed'   : '➜',
+    \ 'Unmerged'  : '═',
+    \ 'Deleted'   : '✖',
+    \ 'Dirty'     : '✗',
+    \ 'Clean'     : '✔',
+    \ 'Ignored'   : '☒',
+    \ 'Unknown'   : '?'
+    \ }
 
